@@ -17,6 +17,6 @@ class Haider {
   }
 
   collide(posX, posY) {
-    return (posX > this.x && posX < this.x + 64 && posY > this.y && posY < this.y + 64);
+    return (posX > this.x && posX < this.x + 32 && posY > this.y && posY < this.y + 64);
   }
 }
