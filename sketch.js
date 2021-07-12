@@ -16,6 +16,6 @@ function draw() {
   }
 }
 
-mouseClicked() {
+function mouseClicked() {
   append(haiders, new Haider(mouseX, mouseY));
 }
