@@ -12,6 +12,6 @@ class Haider {
   }
 
   display() {
-    image(img, this.x, this.y);
+    image(this.img, this.x, this.y);
   }
 }
