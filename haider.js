@@ -5,7 +5,7 @@ class Haider {
     this.x = posX;
     this.y = posY;
     this.speed = 1 + random(1);
-    this.img = loadImage('assets/Haider.png');
+    
   }
 
   move() {
@@ -13,7 +13,7 @@ class Haider {
   }
 
   display() {
-    image(this.img, this.x, this.y);
+    image(haiderImg, this.x, this.y);
   }
 
   collide(posX, posY) {

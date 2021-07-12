@@ -1,8 +1,10 @@
 let bg;
+var haiderImg;
 let haiders = [];
 
 function setup() {
   bg = loadImage('assets/background.png');
+  haiderImg = loadImage('assets/Haider.png');
   createCanvas(1280, 720);
 }
 
