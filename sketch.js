@@ -2,14 +2,10 @@ let bg;
 
 function setup() {
   bg = loadImage('assets/background.png');
-  createCanvas(windowWidth, windowHeight);
+  createCanvas(1280, 720);
 }
 
 function draw() {
 
   background(bg);
-}
-
-function windowResized() {
-  resizeCanvas(windowWidth, windowHeight);
 }
