@@ -1,6 +1,5 @@
 class Haider {
 
-  let img;
 
   constructor(posX, posY) {
     this.x = posX;

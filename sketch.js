@@ -1,5 +1,5 @@
 let bg;
-let haiders[];
+let haiders = [];
 
 function setup() {
   bg = loadImage('assets/background.png');
