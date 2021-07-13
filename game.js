@@ -1,13 +1,22 @@
 let bg;
-var haiderImg;
-let haiders = [];
-var menuScreen;
-var gameScreen;
-var activeScreen;
+let houseFront;
+let houseBack;
+let fence = [];
+let haiderImg;
+let menuScreen;
+let gameScreen;
+let activeScreen;
 
 function setup() {
-  bg = loadImage('assets/background.png');
+  bg = loadImage('assets/Sturm_auf_Schanze_hintergrund.png');
+  houseFront = loadImage('assets/saas_Haus_Vorne.png');
+  houseBack = loadImage('assets/saas_Haus_Hinten.png');
+  for (let i = 1; i <= 7; i++) {
+    fence.push(loadImage(`assets/fence/fence${i}.png`));
+  }
+  
   haiderImg = loadImage('assets/Haider.png');
+
   createCanvas(1280, 720);
 
   gameScreen = new GameScreen();

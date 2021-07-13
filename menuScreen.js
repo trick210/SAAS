@@ -8,7 +8,7 @@ class MenuScreen extends Screen {
   }
 
   update() {
-    this.x += Math.PI / 32;
+    this.x = (this.x + Math.PI / 32) % (2 * Math.PI);
 
     this.size = 48 + 5 * Math.sin(this.x)
   }
@@ -18,10 +18,13 @@ class MenuScreen extends Screen {
     background(51);
 
     fill(255);
+    stroke(0);
+    strokeWeight(3);
+
     textAlign(CENTER, TOP);
-    
+
     textSize(64);
-    text('Der Sturm Der Drachenschanze', 0, 30, width, height);
+    text('Sturm auf Altschauerberg', 0, 30, width, height);
 
     textSize(48);
     text('A Youtuber\'s Life', 0, 120, width, height);
@@ -36,8 +39,9 @@ class MenuScreen extends Screen {
 
 
   click(posX, posY) {
-
-  	activeScreen = gameScreen;
+    if (posX > 0 && posX < width && posY > 0 && posY < height) {
+  	  activeScreen = gameScreen;
+    }
   }
 
 }
