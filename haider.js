@@ -1,6 +1,6 @@
 class Haider {
 
-  static arrivedDist = 0;
+  
 
   constructor(posX, posY) {
     this.x = posX;
@@ -12,17 +12,20 @@ class Haider {
     this.speed = 1 + random(1);
     this.fenceDist = random(50);
 
-    this.arrived = false;
+    this.dmgCounter = 0;
+    this.damage = 1;
     
   }
 
   move() {
-    if (this.x < width - 300 - this.fenceDist - Haider.arrivedDist) {
+    if (this.x < width - 300 - this.fenceDist) {
      this.x += this.speed;
     } else {
-      if (!this.arrived) {
-        Haider.arrivedDist++;
-        this.arrived = true;
+      this.dmgCounter += deltaTime;
+
+      if (this.dmgCounter > 1000) {
+        this.dmgCounter = 0;
+        gameScreen.health -= this.damage;
       }
     }
   }

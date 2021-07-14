@@ -5,6 +5,7 @@ let fence = [];
 let haiderImg;
 let menuScreen;
 let gameScreen;
+let deathScreen;
 let activeScreen;
 
 function setup() {
@@ -21,6 +22,7 @@ function setup() {
 
   gameScreen = new GameScreen();
   menuScreen = new MenuScreen();
+  deathScreen = new DeathScreen();
 
   activeScreen = menuScreen;
 }

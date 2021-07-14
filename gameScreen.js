@@ -6,13 +6,22 @@ class GameScreen extends Screen {
   	this.haiders = [];
     this.buttons = [];
   	this.score = 0;
+    this.health = 100;
+    this.maxHP = 100;
 
     this.currentFence = 0;
 
     this.buttons.push(new Button("Upgrade Fence", width - 160, height - 60, 150, 50, this.upgradeFence.bind(this)));
+
+
+    this.overlay = false;
   }
 
   update() {
+
+    if (this.overlay) {
+      return;
+    }
 
 		let r = random(50);
 
@@ -27,6 +36,10 @@ class GameScreen extends Screen {
 
     for (let i = 0; i < this.buttons.length; i++) {
       this.buttons[i].update();
+    }
+
+    if (this.health <= 0) {
+      activeScreen = deathScreen;
     }
   }
 
@@ -54,6 +67,21 @@ class GameScreen extends Screen {
 		textAlign(LEFT, TOP);
 		textSize(32);
 		text('Score: ' + this.score, 10, 10);
+
+    //HP Bar
+
+    strokeWeight(0);
+    fill(255 * (1 - this.health / this.maxHP), 255 * (this.health / this.maxHP), 0, 150);
+
+    rect(width - 210, 10, 200 * (this.health / this.maxHP), 50);
+
+    stroke(0);
+    strokeWeight(3);
+    noFill();
+
+    rect(width - 210, 10, 200, 50);
+
+
 
   }
 
