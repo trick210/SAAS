@@ -5,7 +5,9 @@ class GameScreen extends Screen {
 
   	this.haiders = [];
     this.buttons = [];
+    this.entities = [];
   	this.score = 0;
+    this.money = 0;
     this.health = 100;
     this.maxHP = 100;
 
@@ -40,6 +42,10 @@ class GameScreen extends Screen {
 	  	this.haiders[i].update();
 		}
 
+    for (let i = 0; i < this.entities.length; i++) {
+      this.entities[i].update();
+    }
+
     if (this.clicked) {
       this.timeExp += deltaTime;
       this.screamRot = (Math.floor(this.timeExp / 50) % 2) * 2 - 1;
@@ -70,8 +76,12 @@ class GameScreen extends Screen {
     image(houseFront, width - (295 / 1.5), height - (661 / 1.5), 295 / 1.5, 661 / 1.5);
 
 		for (let i = 0; i < this.haiders.length; i++) {
-	  	this.haiders[i].display();
+	  	this.haiders[i].draw();
 		}
+
+    for (let i = 0; i < this.entities.length; i++) {
+      this.entities[i].draw();
+    }
 
     if (this.clicked) {
       push();   
@@ -98,6 +108,12 @@ class GameScreen extends Screen {
 		textAlign(LEFT, TOP);
 		textSize(32);
 		text('Score: ' + this.score, 10, 10);
+
+
+    //Barrene
+
+    fill(255, 215, 0);
+    text(`$ ${this.money}`, 200, 10);
 
     //HP Bar
 
@@ -142,6 +158,11 @@ class GameScreen extends Screen {
 
     for (let i = 0; i < this.buttons.length; i++) {
       this.buttons[i].click(posX, posY);
+    }
+
+    if (posX > width - 180 && posX < width && posY > 350 && posY < 650) {
+      this.entities.push(new Barrene(posX, posY));
+      this.money++;
     }
 
   }

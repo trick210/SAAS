@@ -4,6 +4,7 @@ let houseBack;
 let fence = [];
 let haiderImg;
 let screamImg;
+let barreneImg;
 let menuScreen;
 let gameScreen;
 let deathScreen;
@@ -20,6 +21,7 @@ function preload() {
   
   haiderImg = loadImage('assets/Haider.png');
   screamImg = loadImage('assets/schrei.png');
+  barreneImg = loadImage('assets/Barrene.png');
 
 }
 

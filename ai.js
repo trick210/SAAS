@@ -38,7 +38,7 @@ class AttackAI extends AI {
 
   update() {
     
-    this.dmgCounter += deltaTime;
+    this.dmgCounter += deltaTime * (deltaTime / 20);
 
     if (this.dmgCounter > 1000) {
       this.dmgCounter = 0;
@@ -60,7 +60,7 @@ class WalkBackAI extends AI {
 
   update() {
     
-    this.haider.x -= 1.5;
+    this.haider.x -= 1.5 * (deltaTime / 20);
     
     this.counter += deltaTime;
 

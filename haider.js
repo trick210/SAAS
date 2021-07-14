@@ -27,7 +27,7 @@ class Haider {
     
   }
 
-  display() {
+  draw() {
     drawingContext.globalAlpha = this.alpha;
     if (this.killed) {
       push();
