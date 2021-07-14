@@ -5,12 +5,13 @@ class MenuScreen extends Screen {
     
     
     this.x = 0;
+    this.size = 48;
   }
 
   update() {
     this.x = (this.x + Math.PI / 32) % (2 * Math.PI);
 
-    this.size = 48 + 5 * Math.sin(this.x)
+    this.size = 48 + 5 * Math.sin(this.x);
   }
 
 

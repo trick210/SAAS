@@ -15,6 +15,11 @@ class GameScreen extends Screen {
 
 
     this.overlay = false;
+
+    this.clicked = false;
+    this.clickCD = 500;
+    this.timeExp = 0;
+    this.screamRot = -1
   }
 
   update() {
@@ -29,10 +34,23 @@ class GameScreen extends Screen {
 	  	this.spawn();
     }
 
+    this.haiders.sort((a, b) => a.y - b.y);
 
     for (let i = 0; i < this.haiders.length; i++) {
-	  	this.haiders[i].move();
+	  	this.haiders[i].update();
 		}
+
+    if (this.clicked) {
+      this.timeExp += deltaTime;
+      this.screamRot = (Math.floor(this.timeExp / 50) % 2) * 2 - 1;
+    }
+
+    if (this.timeExp > this.clickCD) {
+      this.timeExp = 0;
+      this.clicked = false;
+    }
+
+
 
     for (let i = 0; i < this.buttons.length; i++) {
       this.buttons[i].update();
@@ -55,10 +73,23 @@ class GameScreen extends Screen {
 	  	this.haiders[i].display();
 		}
 
+    if (this.clicked) {
+      push();   
+      translate(this.screamPosX + 120, this.screamPosY + 30);
+      rotate(this.screamRot / 20);
+      imageMode(CENTER);
+      image(screamImg, 0, 0, 128 / 1.5, 128 / 1.5);
+      pop();
+    }
+
+
+
     for (let i = 0; i < this.buttons.length; i++) {
       this.buttons[i].draw();
     }
 
+
+    //Score
 
     fill(255);
     stroke(0);
@@ -70,18 +101,21 @@ class GameScreen extends Screen {
 
     //HP Bar
 
-    strokeWeight(0);
-    fill(255 * (1 - this.health / this.maxHP), 255 * (this.health / this.maxHP), 0, 150);
+    stroke(0);
+    strokeWeight(3);
+    fill(100);
+    rect(width - 210, 10, 200, 50);
+
+    fill(255 * (1 - this.health / this.maxHP), 255 * (this.health / this.maxHP), 0);
 
     rect(width - 210, 10, 200 * (this.health / this.maxHP), 50);
 
-    stroke(0);
-    strokeWeight(3);
-    noFill();
+    textAlign(CENTER, CENTER);
 
-    rect(width - 210, 10, 200, 50);
+    fill(255);
 
-
+    textSize(20);
+    text(`${this.health} / ${this.maxHP}`, width - 210 + 200 / 2, 10 + 50 / 2);
 
   }
 
@@ -93,11 +127,16 @@ class GameScreen extends Screen {
 
   click(posX, posY) {
 
-  	for (let i = 0; i < this.haiders.length; i++) {
-      if (this.haiders[i].collide(posX, posY)) {
-        this.haiders.splice(i, 1);
-        this.score++;
-        break;
+    if (!this.clicked) {
+  	  for (let i = 0; i < this.haiders.length; i++) {
+        let h = this.haiders[i].click(posX, posY)
+
+        if (h != null) {   
+          this.clicked = true; 
+          this.screamPosX = h.x;
+          this.screamPosY = h.y;    
+          break;
+        }
       }
     }
 
@@ -115,6 +154,8 @@ class GameScreen extends Screen {
 
   upgradeFence() {
     if (this.currentFence < 6) {
+      this.health += 50;
+      this.maxHP += 50;
       this.currentFence++;
     }
   }

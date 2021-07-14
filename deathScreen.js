@@ -5,6 +5,7 @@ class DeathScreen extends Screen {
     
     
     this.x = 0;
+    this.size = 48;
   }
 
   update() {

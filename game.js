@@ -3,12 +3,14 @@ let houseFront;
 let houseBack;
 let fence = [];
 let haiderImg;
+let screamImg;
 let menuScreen;
 let gameScreen;
 let deathScreen;
 let activeScreen;
 
-function setup() {
+function preload() {
+
   bg = loadImage('assets/Sturm_auf_Schanze_hintergrund.png');
   houseFront = loadImage('assets/saas_Haus_Vorne.png');
   houseBack = loadImage('assets/saas_Haus_Hinten.png');
@@ -17,6 +19,12 @@ function setup() {
   }
   
   haiderImg = loadImage('assets/Haider.png');
+  screamImg = loadImage('assets/schrei.png');
+
+}
+
+function setup() {
+  
 
   createCanvas(1280, 720);
 

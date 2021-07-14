@@ -7,34 +7,47 @@ class Haider {
     this.y = posY;
 
     this.width = 64;
-    this.heigth = 128;
+    this.height = 128;
+
+    this.currentAI = new RunAI(this);
 
     this.speed = 1 + random(1);
     this.fenceDist = random(50);
 
-    this.dmgCounter = 0;
     this.damage = 1;
+
+    this.killed = false;
+    this.alpha = 1;
     
   }
 
-  move() {
-    if (this.x < width - 300 - this.fenceDist) {
-     this.x += this.speed;
-    } else {
-      this.dmgCounter += deltaTime;
+  update() {
 
-      if (this.dmgCounter > 1000) {
-        this.dmgCounter = 0;
-        gameScreen.health -= this.damage;
-      }
-    }
+    this.currentAI.update();
+    
   }
 
   display() {
-    image(haiderImg, this.x, this.y, this.width, this.heigth);
+    drawingContext.globalAlpha = this.alpha;
+    if (this.killed) {
+      push();
+      scale(-1, 1);
+      image(haiderImg, -this.x - this.width, this.y, this.width, this.height);
+      pop();
+    } else {
+      image(haiderImg, this.x, this.y, this.width, this.height);
+    }
+    drawingContext.globalAlpha = 1;
   }
 
-  collide(posX, posY) {
-    return (posX > this.x && posX < this.x + this.width && posY > this.y && posY < this.y + this.heigth);
+  click(posX, posY) {
+    if (posX > this.x && posX < this.x + this.width && posY > this.y && posY < this.y + this.height && !this.killed) {
+      gameScreen.score++;
+      this.killed = true;
+      this.currentAI = new WalkBackAI(this);
+      return this;
+    }
+
+    return null;
   }
 }
