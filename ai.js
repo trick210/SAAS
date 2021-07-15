@@ -33,7 +33,7 @@ class AttackAI extends AI {
   constructor(haider) {
     super(haider);
 
-    this.dmgCounter = 0;
+    this.dmgCounter = 1000;
   }
 
   update() {
@@ -67,8 +67,8 @@ class WalkBackAI extends AI {
     this.haider.alpha = 1 - this.counter / this.alive;
 
     if (this.counter > this.alive) {
-      let i = gameScreen.haiders.indexOf(this.haider);
-      gameScreen.haiders.splice(i, 1);
+      let i = gameScreen.entities.indexOf(this.haider);
+      gameScreen.entities.splice(i, 1);
     }
   }
 }

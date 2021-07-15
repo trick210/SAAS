@@ -6,6 +6,8 @@ class Barrene extends Entity {
     this.lifetime = 1500;
 
     this.alpha = 1;
+
+    this.layer = 20;
   }
 
   update() {

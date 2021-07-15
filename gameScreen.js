@@ -1,10 +1,9 @@
-class GameScreen extends Screen {
+class GameScreen {
 
   constructor() {
-  	super();
 
-  	this.haiders = [];
-    this.buttons = [];
+    this.ui = new UI(this);
+
     this.entities = [];
   	this.score = 0;
     this.money = 0;
@@ -13,15 +12,11 @@ class GameScreen extends Screen {
 
     this.currentFence = 0;
 
-    this.buttons.push(new Button("Upgrade Fence", width - 160, height - 60, 150, 50, this.upgradeFence.bind(this)));
-
 
     this.overlay = false;
 
     this.clicked = false;
-    this.clickCD = 500;
-    this.timeExp = 0;
-    this.screamRot = -1
+    
   }
 
   update() {
@@ -36,31 +31,13 @@ class GameScreen extends Screen {
 	  	this.spawn();
     }
 
-    this.haiders.sort((a, b) => a.y - b.y);
-
-    for (let i = 0; i < this.haiders.length; i++) {
-	  	this.haiders[i].update();
-		}
+    this.entities.sort((a, b) => (a.layer == b.layer) ? a.y - b.y : a.layer - b.layer);
 
     for (let i = 0; i < this.entities.length; i++) {
       this.entities[i].update();
     }
 
-    if (this.clicked) {
-      this.timeExp += deltaTime;
-      this.screamRot = (Math.floor(this.timeExp / 50) % 2) * 2 - 1;
-    }
-
-    if (this.timeExp > this.clickCD) {
-      this.timeExp = 0;
-      this.clicked = false;
-    }
-
-
-
-    for (let i = 0; i < this.buttons.length; i++) {
-      this.buttons[i].update();
-    }
+    this.ui.update();
 
     if (this.health <= 0) {
       activeScreen = deathScreen;
@@ -75,92 +52,33 @@ class GameScreen extends Screen {
     image(fence[this.currentFence], width - 270, 100, 241 / 1.5, 782 / 1.5);
     image(houseFront, width - (295 / 1.5), height - (661 / 1.5), 295 / 1.5, 661 / 1.5);
 
-		for (let i = 0; i < this.haiders.length; i++) {
-	  	this.haiders[i].draw();
-		}
-
     for (let i = 0; i < this.entities.length; i++) {
       this.entities[i].draw();
     }
 
-    if (this.clicked) {
-      push();   
-      translate(this.screamPosX + 120, this.screamPosY + 30);
-      rotate(this.screamRot / 20);
-      imageMode(CENTER);
-      image(screamImg, 0, 0, 128 / 1.5, 128 / 1.5);
-      pop();
-    }
-
-
-
-    for (let i = 0; i < this.buttons.length; i++) {
-      this.buttons[i].draw();
-    }
-
-
-    //Score
-
-    fill(255);
-    stroke(0);
-    strokeWeight(3);
-
-		textAlign(LEFT, TOP);
-		textSize(32);
-		text('Score: ' + this.score, 10, 10);
-
-
-    //Barrene
-
-    fill(255, 215, 0);
-    text(`$ ${this.money}`, 200, 10);
-
-    //HP Bar
-
-    stroke(0);
-    strokeWeight(3);
-    fill(100);
-    rect(width - 210, 10, 200, 50);
-
-    fill(255 * (1 - this.health / this.maxHP), 255 * (this.health / this.maxHP), 0);
-
-    rect(width - 210, 10, 200 * (this.health / this.maxHP), 50);
-
-    textAlign(CENTER, CENTER);
-
-    fill(255);
-
-    textSize(20);
-    text(`${this.health} / ${this.maxHP}`, width - 210 + 200 / 2, 10 + 50 / 2);
+    this.ui.draw();
 
   }
 
   spawn() {
     let y = random(120, 580);
-    append(this.haiders, new Haider(-64, y));
+    this.entities.push(new Haider(-64, y));
   }
 
 
   click(posX, posY) {
 
-    if (!this.clicked) {
-  	  for (let i = 0; i < this.haiders.length; i++) {
-        let h = this.haiders[i].click(posX, posY)
-
-        if (h != null) {   
-          this.clicked = true; 
-          this.screamPosX = h.x;
-          this.screamPosY = h.y;    
-          break;
-        }
+    if (this.ui.click(posX, posY)) {
+      return;
+    }
+    
+  	for (let i = 0; i < this.entities.length; i++) {
+      if (this.entities[i].click(posX, posY)) {  
+        break;
       }
     }
 
-    for (let i = 0; i < this.buttons.length; i++) {
-      this.buttons[i].click(posX, posY);
-    }
-
-    if (posX > width - 180 && posX < width && posY > 350 && posY < 650) {
+    if (posX > width - 180 && posX < width && posY > 370 && posY < height) {
       this.entities.push(new Barrene(posX, posY));
       this.money++;
     }

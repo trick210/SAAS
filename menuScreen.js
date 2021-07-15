@@ -1,8 +1,6 @@
-class MenuScreen extends Screen {
+class MenuScreen {
 
-  constructor() {
-    super();
-    
+  constructor() {    
     
     this.x = 0;
     this.size = 48;

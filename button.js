@@ -46,7 +46,10 @@ class Button {
   click(posX, posY) {
     if (posX > this.x && posX < this.x + this.width && posY > this.y && posY < this.y + this.heigth) {
       this.fn();
+      return true;
     }
+
+    return false;
   }
 
 

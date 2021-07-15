@@ -1,8 +1,6 @@
-class DeathScreen extends Screen {
+class DeathScreen {
 
-  constructor() {
-    super();
-    
+  constructor() {    
     
     this.x = 0;
     this.size = 48;

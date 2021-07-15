@@ -1,10 +1,9 @@
-class Haider {
+class Haider extends Entity {
 
   
 
   constructor(posX, posY) {
-    this.x = posX;
-    this.y = posY;
+    super(posX, posY);
 
     this.width = 64;
     this.height = 128;
@@ -41,13 +40,17 @@ class Haider {
   }
 
   click(posX, posY) {
-    if (posX > this.x && posX < this.x + this.width && posY > this.y && posY < this.y + this.height && !this.killed) {
+    if (posX > this.x && posX < this.x + this.width && posY > this.y && posY < this.y + this.height && !this.killed && !gameScreen.clicked) {
       gameScreen.score++;
       this.killed = true;
       this.currentAI = new WalkBackAI(this);
-      return this;
+
+      gameScreen.clicked = true;
+      gameScreen.entities.push(new Scream(this.x, this.y));
+
+      return true;
     }
 
-    return null;
+    return false;
   }
 }
