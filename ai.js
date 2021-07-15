@@ -67,8 +67,7 @@ class WalkBackAI extends AI {
     this.haider.alpha = 1 - this.counter / this.alive;
 
     if (this.counter > this.alive) {
-      let i = gameScreen.entities.indexOf(this.haider);
-      gameScreen.entities.splice(i, 1);
+      this.haider.remove();
     }
   }
 }

@@ -20,8 +20,7 @@ class Barrene extends Entity {
     }
 
     if (this.lifetime < 0) {
-      let i = gameScreen.entities.indexOf(this);
-      gameScreen.entities.splice(i, 1);
+      this.remove();
     }
   }
 

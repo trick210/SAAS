@@ -21,8 +21,7 @@ class Scream extends Entity {
       this.timeExp = 0;
       gameScreen.clicked = false;
 
-      let i = gameScreen.entities.indexOf(this);
-      gameScreen.entities.splice(i, 1);
+      this.remove();
     }
   }
 

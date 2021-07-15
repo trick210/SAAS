@@ -18,4 +18,9 @@ class Entity {
   click(posX, posY) {
     return false;
   }
+
+  remove() {
+    let i = gameScreen.entities.indexOf(this);
+    gameScreen.entities.splice(i, 1);
+  }
 }

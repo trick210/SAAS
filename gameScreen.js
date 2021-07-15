@@ -99,4 +99,8 @@ class GameScreen {
     }
   }
 
+  spawnCar() {
+    this.entities.push(new AudiA4());
+  }
+
 }
