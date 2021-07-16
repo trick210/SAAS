@@ -10,6 +10,8 @@ let gameScreen;
 let deathScreen;
 let activeScreen;
 
+let skrrrSound;
+
 function preload() {
 
   bg = loadImage('assets/Sturm_auf_Schanze_hintergrund.png');
@@ -24,6 +26,9 @@ function preload() {
   barreneImg = loadImage('assets/Barrene.png');
   audiImg = loadImage('assets/AudiA4.png')
 
+  skrrrSound = loadSound('assets/sounds/skrrr-skrrr.mp3');
+  
+
 }
 
 function setup() {
@@ -31,11 +36,14 @@ function setup() {
 
   createCanvas(1280, 720);
 
+  skrrrSound.setVolume(0.1);
+
   gameScreen = new GameScreen();
   menuScreen = new MenuScreen();
   deathScreen = new DeathScreen();
 
   activeScreen = menuScreen;
+
 }
 
 function draw() {

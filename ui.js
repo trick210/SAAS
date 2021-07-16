@@ -7,7 +7,7 @@ class UI {
     this.buttons = [];
 
     this.buttons.push(new Button("Zaun ausbauen", width - 160, height - 60, 150, 50, this.gs.upgradeFence.bind(this.gs)));
-    this.buttons.push(new Button("Skrr Skrr", width - 320, height - 60, 150, 50, this.gs.spawnCar.bind(this.gs)));
+    this.buttons.push(new Button("Skrrr Skrrr", width - 320, height - 60, 150, 50, this.gs.spawnCar.bind(this.gs)));
   }
 
   update() {
@@ -41,7 +41,7 @@ class UI {
     text(`${this.gs.money}`, 250, 10);
 
     noStroke();
-    image(barreneImg, 200, 0, 48, 48);
+    image(barreneImg, 190, 0, 48, 48);
 
     //HP Bar
 

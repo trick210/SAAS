@@ -8,6 +8,10 @@ class AudiA4 extends Entity {
 
     this.rot = -1;
     this.timeExp = 0;
+
+    if (!skrrrSound.isPlaying()) {
+      skrrrSound.play();
+    }
   }
 
   update() {
