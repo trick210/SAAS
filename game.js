@@ -12,6 +12,8 @@ let activeScreen;
 
 let skrrrSound;
 
+let csr;
+
 function preload() {
 
   bg = loadImage('assets/Sturm_auf_Schanze_hintergrund.png');
@@ -48,9 +50,13 @@ function setup() {
 
 function draw() {
 
+  csr = ARROW;
+
   activeScreen.update();
 
   activeScreen.draw();
+
+  cursor(csr);
 
 }
 
@@ -64,5 +70,9 @@ function mouseClicked() {
 function keyPressed() {
 
   activeScreen.key(keyCode);
+}
+
+function getBaseLog(x, y) {
+  return Math.log(y) / Math.log(x);
 }
 

@@ -18,8 +18,7 @@ class Scream extends Entity {
     
 
     if (this.timeExp > this.clickCD) {
-      this.timeExp = 0;
-      gameScreen.clicked = false;
+      gameScreen.screamCD = false;
 
       this.remove();
     }

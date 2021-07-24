@@ -6,8 +6,8 @@ class UI {
 
     this.buttons = [];
 
-    this.buttons.push(new Button("Zaun ausbauen", width - 160, height - 60, 150, 50, this.gs.upgradeFence.bind(this.gs)));
-    this.buttons.push(new Button("Skrrr Skrrr", width - 320, height - 60, 150, 50, this.gs.spawnCar.bind(this.gs)));
+    this.buttons.push(new BuyButton("Zaun ausbauen", width - 160, height - 60, 150, 50, this.gs.upgradeFence.bind(this.gs), this.gs.fencePrice));
+    this.buttons.push(new CDButton("Skrrr Skrrr", width - 320, height - 60, 150, 50, this.gs.spawnCar.bind(this.gs), this.gs.skrrrCD, false));
   }
 
   update() {
@@ -60,6 +60,23 @@ class UI {
 
     textSize(20);
     text(`${this.gs.health} / ${this.gs.maxHP}`, width - 210 + 200 / 2, 10 + 50 / 2);
+
+    //Energy Bar
+
+    stroke(0);
+    strokeWeight(3);
+    fill(100);
+    rect(width - 520, 10, 300, 50);
+
+    fill(255, 255, 0);
+    rect(width - 520, 10, 300 * (this.gs.energy / this.gs.maxEnergy), 50);
+
+    textAlign(CENTER, CENTER);
+
+    fill(255);
+
+    textSize(20);
+    text(`Energy: ${this.gs.energy} / ${this.gs.maxEnergy}`, width - 520 + 300 / 2, + 10 + 50 / 2);
   }
 
   click(posX, posY) {

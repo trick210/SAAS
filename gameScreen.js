@@ -2,21 +2,37 @@ class GameScreen {
 
   constructor() {
 
-    this.ui = new UI(this);
+    
 
     this.entities = [];
   	this.score = 0;
     this.money = 0;
-    this.health = 100;
+    
     this.maxHP = 100;
+    this.health = this.maxHP;
+
+    this.maxEnergy = 200;
+    this.energy = this.maxEnergy;
+
+    this.energyReg = 10;
+
+    this.screamCost = 10;
+    this.barreneCost = 10;
+    this.skrrrCD = new Object();
+    this.skrrrCD.value = 30;
 
     this.currentFence = 0;
+    this.fencePrice = new Object();
+    this.fencePrice.value = 20;
 
+
+    this.clockCounter = 0;
+
+    this.screamCD = false;
 
     this.overlay = false;
-
-    this.clicked = false;
     
+    this.ui = new UI(this);
   }
 
   update() {
@@ -29,6 +45,15 @@ class GameScreen {
 
 		if (r < 1) {
 	  	this.spawn();
+    }
+
+    if (this.energy < this.maxEnergy) {
+      this.clockCounter += deltaTime;
+    }
+
+    if (this.clockCounter >= 500) {
+      this.clockCounter -= 500;
+      this.energy = Math.min(this.maxEnergy, this.energy + this.energyReg / 2);
     }
 
     this.entities.sort((a, b) => (a.layer == b.layer) ? a.y - b.y : a.layer - b.layer);
@@ -78,9 +103,10 @@ class GameScreen {
       }
     }
 
-    if (posX > width - 180 && posX < width && posY > 370 && posY < height) {
+    if (posX > width - 180 && posX < width && posY > 370 && posY < height && this.energy >= this.barreneCost) {
       this.entities.push(new Barrene(posX, posY));
       this.money++;
+      this.energy -= this.barreneCost;
     }
 
   }
@@ -96,11 +122,14 @@ class GameScreen {
       this.health += 50;
       this.maxHP += 50;
       this.currentFence++;
+      this.money -= this.fencePrice.value;
+      this.fencePrice.value += 20;
     }
   }
 
   spawnCar() {
     this.entities.push(new AudiA4());
+    
   }
 
 }

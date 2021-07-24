@@ -41,7 +41,7 @@ class AttackAI extends AI {
     this.dmgCounter += deltaTime * (deltaTime / 20);
 
     if (this.dmgCounter > 1000) {
-      this.dmgCounter = 0;
+      this.dmgCounter -= 1000;
       gameScreen.health -= this.haider.damage;
     }
     

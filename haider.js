@@ -40,10 +40,13 @@ class Haider extends Entity {
   }
 
   click(posX, posY) {
-    if (posX > this.x && posX < this.x + this.width && posY > this.y && posY < this.y + this.height && !this.killed && !gameScreen.clicked) {
-      this.kill();
-      gameScreen.clicked = true;
-      gameScreen.entities.push(new Scream(this.x, this.y));
+    if (posX > this.x && posX < this.x + this.width && posY > this.y && posY < this.y + this.height && !this.killed && !gameScreen.screamCD) {
+      if (gameScreen.energy >= gameScreen.screamCost) {
+        this.kill();
+        gameScreen.entities.push(new Scream(this.x, this.y));
+        gameScreen.energy -= gameScreen.screamCost;
+        gameScreen.screamCD = true;
+      }
 
       return true;
     }
