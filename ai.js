@@ -19,8 +19,8 @@ class RunAI extends AI {
   }
 
   update() {
-    if (this.haider.x < width - 300 - this.haider.fenceDist) {
-     this.haider.x += this.haider.speed;
+    if (this.haider.x < width - 450 - this.haider.fenceDist) {
+     this.haider.x += this.haider.speed * (deltaTime / 20);
     } else {
       this.haider.currentAI = new AttackAI(this.haider);
     }
@@ -38,7 +38,7 @@ class AttackAI extends AI {
 
   update() {
     
-    this.dmgCounter += deltaTime * (deltaTime / 20);
+    this.dmgCounter += deltaTime
 
     if (this.dmgCounter > 1000) {
       this.dmgCounter -= 1000;
@@ -56,6 +56,9 @@ class WalkBackAI extends AI {
 
     this.counter = 0;
     this.alive = 2000;
+
+    this.haider.img.anchor.x = 0.5;
+    this.haider.img.scale.x *= -1;
   }
 
   update() {
@@ -65,6 +68,8 @@ class WalkBackAI extends AI {
     this.counter += deltaTime;
 
     this.haider.alpha = 1 - this.counter / this.alive;
+
+    this.haider.img.alpha = this.haider.alpha;
 
     if (this.counter > this.alive) {
       this.haider.remove();

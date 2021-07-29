@@ -1,7 +1,7 @@
 class Scream extends Entity {
 
   constructor(posX, posY) {
-    super(posX, posY);
+    super(posX + 120, posY - 30, 128, 128, new Sprite(resources['screamImg'].texture));
 
     this.layer = 10;
 
@@ -9,6 +9,10 @@ class Scream extends Entity {
 
     this.clickCD = 500;
     this.timeExp = 0;
+
+    this.img.layer = 10;
+    this.img.anchor.set(0.5);
+
   }
 
   update() {
@@ -16,6 +20,7 @@ class Scream extends Entity {
     this.timeExp += deltaTime;
     this.rot = (Math.floor(this.timeExp / 50) % 2) * 2 - 1;
     
+    this.img.rotation = this.rot / 20;
 
     if (this.timeExp > this.clickCD) {
       gameScreen.screamCD = false;
@@ -24,13 +29,5 @@ class Scream extends Entity {
     }
   }
 
-  draw() {
-    push();   
-    translate(this.x + 120, this.y + 30);
-    rotate(this.rot / 20);
-    imageMode(CENTER);
-    image(screamImg, 0, 0, 128 / 1.5, 128 / 1.5);
-    pop();
-  }
 
 }

@@ -25,14 +25,41 @@ class GameScreen {
     this.fencePrice = new Object();
     this.fencePrice.value = 20;
 
+    this.overlay = false;
 
     this.clockCounter = 0;
 
     this.screamCD = false;
-
-    this.overlay = false;
     
     this.ui = new UI(this);
+
+    this.bg = new Sprite(resources['bg'].texture);
+    this.houseFront = new Sprite(resources['houseFrontImg'].texture);
+    this.houseBack = new Sprite(resources['houseBackImg'].texture);
+    this.fence = new Sprite(resources[`fence1`].texture);
+
+    this.houseBack.x = width - 518;
+    this.houseFront.x = width - 295;
+    this.houseFront.y = height - 661;
+    this.fence.x = width - 405;
+    this.fence.y = 150;
+  
+
+    this.container = new PIXI.Container();
+    this.bgContainer = new PIXI.Container();
+    this.entityContainer = new PIXI.Container();
+
+    this.container.addChild(this.bgContainer);
+    this.container.addChild(this.entityContainer);
+    this.container.addChild(this.ui.container);
+
+    this.bgContainer.addChild(this.bg);
+    this.bgContainer.addChild(this.houseBack);
+    this.bgContainer.addChild(this.fence);
+    this.bgContainer.addChild(this.houseFront);
+
+    this.houseFront.interactive = true;
+    this.houseFront.on('click', this.clickHouse.bind(this));
   }
 
   update() {
@@ -41,7 +68,7 @@ class GameScreen {
       return;
     }
 
-		let r = random(50);
+		let r = Math.random() * 50;
 
 		if (r < 1) {
 	  	this.spawn();
@@ -56,64 +83,38 @@ class GameScreen {
       this.energy = Math.min(this.maxEnergy, this.energy + this.energyReg / 2);
     }
 
-    this.entities.sort((a, b) => (a.layer == b.layer) ? a.y - b.y : a.layer - b.layer);
-
     for (let i = 0; i < this.entities.length; i++) {
       this.entities[i].update();
     }
 
+    this.sortEntities();
+
     this.ui.update();
 
     if (this.health <= 0) {
-      activeScreen = deathScreen;
+      setActiveScreen(deathScreen);
     }
+    
   }
 
-
-  draw() {
-
-    background(bg);
-    image(houseBack, width - (518 / 1.5), 0, 518 / 1.5, 414 / 1.5);
-    image(fence[this.currentFence], width - 270, 100, 241 / 1.5, 782 / 1.5);
-    image(houseFront, width - (295 / 1.5), height - (661 / 1.5), 295 / 1.5, 661 / 1.5);
-
-    for (let i = 0; i < this.entities.length; i++) {
-      this.entities[i].draw();
-    }
-
-    this.ui.draw();
-
-  }
 
   spawn() {
-    let y = random(120, 580);
+    let y = 250 + Math.random() * 690;
     this.entities.push(new Haider(-64, y));
   }
 
 
-  click(posX, posY) {
-
-    if (this.ui.click(posX, posY)) {
-      return;
-    }
-    
-  	for (let i = 0; i < this.entities.length; i++) {
-      if (this.entities[i].click(posX, posY)) {  
-        break;
-      }
-    }
-
-    if (posX > width - 180 && posX < width && posY > 370 && posY < height && this.energy >= this.barreneCost) {
-      this.entities.push(new Barrene(posX, posY));
+  clickHouse(event) {
+    if (this.energy >= this.barreneCost) {
+      this.entities.push(new Barrene(event.data.global.x, event.data.global.y));
       this.money++;
       this.energy -= this.barreneCost;
     }
-
   }
 
-  key(code) {
-  	if (code === ESCAPE) {
-  		activeScreen = menuScreen;
+  keyPress(key) {
+  	if (key == "Escape") {
+  		setActiveScreen(menuScreen);
   	}
   }
 
@@ -122,6 +123,7 @@ class GameScreen {
       this.health += 50;
       this.maxHP += 50;
       this.currentFence++;
+      this.fence.texture = resources[`fence${this.currentFence + 1}`].texture;
       this.money -= this.fencePrice.value;
       this.fencePrice.value += 20;
     }
@@ -129,7 +131,10 @@ class GameScreen {
 
   spawnCar() {
     this.entities.push(new AudiA4());
-    
+  }
+
+  sortEntities() {
+    this.entityContainer.children.sort((a, b) => (a.layer == b.layer) ? a.y - b.y : a.layer - b.layer);
   }
 
 }

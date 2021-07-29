@@ -3,60 +3,47 @@ class Haider extends Entity {
   
 
   constructor(posX, posY) {
-    super(posX, posY);
-
-    this.width = 64;
-    this.height = 128;
+    super(posX, posY, 96, 192, new Sprite(resources['haiderImg'].texture));
 
     this.currentAI = new RunAI(this);
 
-    this.speed = 1 + random(1);
-    this.fenceDist = random(50);
+    this.speed = 1.5 + Math.random();
+    this.fenceDist = Math.random() * 75;
 
     this.damage = 1;
 
     this.killed = false;
     this.alpha = 1;
+
+    this.img.interactive = true;
+    this.img.on('click', this.click.bind(this));
+
+    this.img.anchor.set(0.5, 1 - 120 / this.height);
     
   }
 
   update() {
-
     this.currentAI.update();
+    super.update();
     
   }
 
-  draw() {
-    drawingContext.globalAlpha = this.alpha;
-    if (this.killed) {
-      push();
-      scale(-1, 1);
-      image(haiderImg, -this.x - this.width, this.y, this.width, this.height);
-      pop();
-    } else {
-      image(haiderImg, this.x, this.y, this.width, this.height);
-    }
-    drawingContext.globalAlpha = 1;
-  }
 
-  click(posX, posY) {
-    if (posX > this.x && posX < this.x + this.width && posY > this.y && posY < this.y + this.height && !this.killed && !gameScreen.screamCD) {
+  click() {
+    if (!this.killed && !gameScreen.screamCD) {
       if (gameScreen.energy >= gameScreen.screamCost) {
         this.kill();
         gameScreen.entities.push(new Scream(this.x, this.y));
         gameScreen.energy -= gameScreen.screamCost;
         gameScreen.screamCD = true;
       }
-
-      return true;
     }
-
-    return false;
   }
 
   kill() {
     gameScreen.score++;
     this.killed = true;
+    this.img.interactive = false;
     this.currentAI = new WalkBackAI(this);
 
     

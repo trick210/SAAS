@@ -1,78 +1,140 @@
-let bg;
-let houseFront;
-let houseBack;
-let fence = [];
 let haiderImg;
 let screamImg;
 let barreneImg;
 let menuScreen;
 let gameScreen;
 let deathScreen;
-let activeScreen;
+let activeScreen = null;
 
 let skrrrSound;
 
-let csr;
+let width = 1920;
+let height = 1080;
+let deltaTime = 0;
+let lastTime = 0;
 
-function preload() {
+//Aliases
+let Application = PIXI.Application,
+    loader = PIXI.Loader.shared,
+    resources = loader.resources,
+    Sprite = PIXI.Sprite;
 
-  bg = loadImage('assets/Sturm_auf_Schanze_hintergrund.png');
-  houseFront = loadImage('assets/saas_Haus_Vorne.png');
-  houseBack = loadImage('assets/saas_Haus_Hinten.png');
-  for (let i = 1; i <= 7; i++) {
-    fence.push(loadImage(`assets/fence/fence${i}.png`));
+let app = new PIXI.Application({ 
+    width: width, 
+    height: height,                       
+    antialias: true, 
+    transparent: false, 
+    resolution: 1
   }
-  
-  haiderImg = loadImage('assets/Haider.png');
-  screamImg = loadImage('assets/schrei.png');
-  barreneImg = loadImage('assets/Barrene.png');
-  audiImg = loadImage('assets/AudiA4.png')
+);
 
-  skrrrSound = loadSound('assets/sounds/skrrr-skrrr.mp3');
-  
+app.renderer.backgroundColor = 0x2C3539;
 
+document.body.appendChild(app.view);
+let scale = scaleToWindow(app.renderer.view, '#2C3539');
+
+window.addEventListener("resize", function(event){ 
+  scale = scaleToWindow(app.renderer.view, '#2C3539');
+});
+
+loader
+  .add('bg', 'assets/Sturm_auf_Schanze_hintergrund.png')
+  .add('houseFrontImg', 'assets/saas_Haus_Vorne.png')
+  .add('houseBackImg', 'assets/saas_Haus_Hinten.png')
+  .add('haiderImg', 'assets/Haider.png')
+  .add('screamImg', 'assets/schrei.png')
+  .add('barreneImg', 'assets/Barrene.png')
+  .add('audiImg', 'assets/AudiA4.png')
+  .add('skrrrSound' , 'assets/sounds/skrrr-skrrr.mp3');
+
+for (let i = 1; i <= 7; i++) {
+  loader.add(`fence${i}`, `assets/fence/fence${i}.png`);
 }
 
+loader.load(setup);
+
+
+let esc = keyboard("Escape");
+esc.press = () => {
+  if (activeScreen.keyPress) {
+    activeScreen.keyPress("Escape");
+  }
+};
+
 function setup() {
-  
-
-  createCanvas(1280, 720);
-
-  skrrrSound.setVolume(0.1);
 
   gameScreen = new GameScreen();
   menuScreen = new MenuScreen();
   deathScreen = new DeathScreen();
 
-  activeScreen = menuScreen;
+  setActiveScreen(menuScreen);
+
+  requestAnimationFrame(update);
 
 }
 
-function draw() {
+function setActiveScreen(screen) {
+  if (activeScreen != null) {
+    app.stage.removeChild(activeScreen.container);
+  }
+  activeScreen = screen;
+  app.stage.addChild(activeScreen.container);
+}
 
-  csr = ARROW;
+function update(time) {
+
+  deltaTime = (time - lastTime) % 100;
+  lastTime = time;
 
   activeScreen.update();
 
-  activeScreen.draw();
-
-  cursor(csr);
-
+  requestAnimationFrame(update);
 }
 
+function keyboard(value) {
+  let key = {};
+  key.value = value;
+  key.isDown = false;
+  key.isUp = true;
+  key.press = undefined;
+  key.release = undefined;
+  //The `downHandler`
+  key.downHandler = event => {
+    if (event.key === key.value) {
+      if (key.isUp && key.press) key.press();
+      key.isDown = true;
+      key.isUp = false;
+      event.preventDefault();
+    }
+  };
 
+  //The `upHandler`
+  key.upHandler = event => {
+    if (event.key === key.value) {
+      if (key.isDown && key.release) key.release();
+      key.isDown = false;
+      key.isUp = true;
+      event.preventDefault();
+    }
+  };
 
-function mouseClicked() {
-
-  activeScreen.click(mouseX, mouseY);
-}
-
-function keyPressed() {
-
-  activeScreen.key(keyCode);
-}
-
-function getBaseLog(x, y) {
-  return Math.log(y) / Math.log(x);
+  //Attach event listeners
+  const downListener = key.downHandler.bind(key);
+  const upListener = key.upHandler.bind(key);
+  
+  window.addEventListener(
+    "keydown", downListener, false
+  );
+  window.addEventListener(
+    "keyup", upListener, false
+  );
+  
+  // Detach event listeners
+  key.unsubscribe = () => {
+    window.removeEventListener("keydown", downListener);
+    window.removeEventListener("keyup", upListener);
+  };
+  
+  return key;
 }
 

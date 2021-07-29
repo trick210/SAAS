@@ -6,53 +6,84 @@ class Button {
     this.x = posX;
     this.y = posY;
     this.width = btnWidth;
-    this.heigth = btnHeight;
+    this.height = btnHeight;
     this.fn = fn;
 
-    this.fill = 255;
+    this.isDown = false;
+    this.isOver = false;
 
+    this.standardFill = 0xFFFFFF;
+    this.hoverFill = 0xDCDCDC;
+    this.downFill = 0xC8C8C8;
+
+    this.container = new PIXI.Container();
+
+    this.rect = new PIXI.Graphics();    
+   
+    this.rect.lineStyle(6, 0x000000, 1);
+    this.rect.beginFill(0xFFFFFF);
+    this.rect.drawRoundedRect(this.x, this.y, this.width, this.height, 10);
+    this.rect.endFill();
+
+    this.rect.tint = this.standardFill;
+
+    this.container.addChild(this.rect);
+
+    this.btnText = new PIXI.Text(text, {fontFamily: 'Arial', fontSize: 30, fill: 'black', align: 'center'});
+    this.btnText.x = this.x + this.width / 2;
+    this.btnText.y = this.y + this.height / 2;
+    this.btnText.anchor.set(0.5);
+
+    this.container.addChild(this.btnText);
+
+
+    this.rect.interactive = true;
+    this.rect.buttonMode = true;
+    this.rect.on('pointerdown', this.onButtonDown.bind(this))
+    this.rect.on('pointerup', this.onButtonUp.bind(this))
+    this.rect.on('pointerupoutside', this.onButtonUp.bind(this))
+    this.rect.on('pointerover', this.onButtonOver.bind(this))
+    this.rect.on('pointerout', this.onButtonOut.bind(this));
+    this.rect.on('click', this.click.bind(this));
+    
+  }
+
+  onButtonDown() {
+    this.isDown = true;
+    this.rect.tint = this.downFill;
+  }
+
+  onButtonUp() {
+    this.isDown = false
+    if (this.isOver) {
+      this.rect.tint = this.hoverFill;
+    } else {
+      this.rect.tint = this.standardFill;
+    }
+  }
+
+  onButtonOver() {
+    this.isOver = true;
+    if (this.isDown) {
+      return;
+    }
+    this.rect.tint = this.hoverFill;
+  }
+
+  onButtonOut() {
+    this.isOver = false;
+    if (this.isDown) {
+      return;
+    }
+    this.rect.tint = this.standardFill;
   }
 
   update() {
 
-    if (mouseX > this.x && mouseX < this.x + this.width && mouseY > this.y && mouseY < this.y + this.heigth) {
-      if (mouseIsPressed) {
-        this.fill = 200;
-      } else {
-        this.fill = 220;
-      }
-
-      csr = HAND;
-    } else {
-      this.fill = 255;
-    }
-
   }
 
-  draw() {
-
-    stroke(0);
-    strokeWeight(3);
-    fill(this.fill);
-
-    rect(this.x, this.y, this.width, this.heigth, 20);
-
-    textAlign(CENTER, CENTER);
-
-    fill(0);
-    strokeWeight(0);
-
-    textSize(20);
-    text(this.text, this.x + this.width / 2, this.y + this.heigth / 2);
-  }
-
-  click(posX, posY) {
-    if (posX > this.x && posX < this.x + this.width && posY > this.y && posY < this.y + this.heigth) {
-      this.fn();
-      return true;
-    }
-
-    return false;
+  click() {
+    this.fn();
   }
 
 
@@ -69,7 +100,44 @@ class CDButton extends Button {
     this.ready = ready;
     this.clock = 0;
 
+    this.btnBorder = new PIXI.Graphics();
+    this.btnProgress = new PIXI.Graphics();
+
+    this.container.addChild(this.btnProgress);
+    this.container.addChild(this.btnBorder);
+
+    this.container.removeChild(this.btnText);
+    this.container.addChild(this.btnText);
+
+    this.btnBorder.lineStyle(6, 0x000000, 1);
+    this.btnBorder.beginFill(0x000000, 0);
+    this.btnBorder.drawRoundedRect(this.x, this.y, this.width, this.height, 10);
+    this.btnBorder.endFill();
+
+    this.btnProgress.beginFill(0xFFFFFF);
+    this.btnProgress.drawRoundedRect(0, 0, this.width, this.height, 10);
+    this.btnProgress.endFill();
+
+    this.btnProgress.tint = 0x9696FF;
+
+    this.btnProgress.x = this.x;
+    this.btnProgress.y = this.y;
+
+    this.hoverFill = 0xFFFFFF;
+    this.downFill = 0xFFFFFF;
+
+    this.btnText.style.fontSize = 24;
+    this.btnText.y = this.y + this.height / 2 - 15;
+
+    this.cdText = new PIXI.Text(`(${this.cd.value} s)`, {fontFamily: 'Arial', fontSize: 24, fill: 'black', align: 'center'});
+    this.cdText.x = this.x + this.width / 2;
+    this.cdText.y = this.y + this.height / 2 + 15
+    this.cdText.anchor.set(0.5);
+
+    this.container.addChild(this.cdText);
+
   }
+
 
   update() {
 
@@ -79,55 +147,23 @@ class CDButton extends Button {
       if (this.clock >= this.cd.value) {
         this.ready = true;
         this.clock = 0;
+        this.btnProgress.tint = 0xB4FFB4;
       }
-    } else {
-      if (mouseX > this.x && mouseX < this.x + this.width && mouseY > this.y && mouseY < this.y + this.heigth) {
-        csr = HAND;
-      }
+
+      this.btnProgress.width = this.width * (this.ready ? 1 : (this.clock / this.cd.value));
+      this.cdText.text = `(${Math.floor((this.cd.value - this.clock))} s)`;
+
     }
+
   }
 
 
-  draw () {
-
-    noStroke();
-    fill(this.fill);
-
-    rect(this.x, this.y, this.width, this.heigth);
-    
-    this.ready ? fill(180, 255, 180) : fill(150, 150, 255);
-
-    rect(this.x, this.y, this.width * (this.ready ? 1 : (this.clock / this.cd.value)), this.heigth);
-
-    stroke(0);
-    strokeWeight(3);
-    noFill();
-
-    rect(this.x, this.y, this.width, this.heigth);
-
-    textAlign(CENTER, CENTER);
-
-    fill(0);
-    stroke(0);
-    strokeWeight(0);
-
-    textSize(16);
-    text(this.text, this.x + this.width / 2, this.y + this.heigth / 2 - 10);
-    text(`(${Math.floor((this.cd.value - this.clock))} s)`, this.x + this.width / 2, this.y + this.heigth / 2 + 10);
-
-  }
-
-  click(posX, posY) {
-    if (posX > this.x && posX < this.x + this.width && posY > this.y && posY < this.y + this.heigth) {
-
-      if (this.ready) {
-        this.fn();
-        this.ready = false;
-      }
-      return true;
+  click() {   
+    if (this.ready) {
+      this.fn();
+      this.ready = false;
+      this.btnProgress.tint = 0x9696FF;
     }
-
-    return false;
   }
 
 
@@ -140,54 +176,49 @@ class BuyButton extends Button {
     super(text, posX, posY, btnWidth, btnHeight, fn);
 
     this.price = price;
+
+    this.btnText.style.fontSize = 24;
+    this.btnText.y = this.y + this.height / 2 - 15;
+
+    this.priceText = new PIXI.Text(this.price.value, {fontFamily: 'Arial', fontSize: 24, fill: 'black', align: 'center'}); 
+    this.priceText.x = this.x + this.width / 2 + 15;
+    this.priceText.y = this.y + this.height / 2 + 15
+    this.priceText.anchor.set(0.5);
+
+    this.container.addChild(this.priceText);
+
+    this.barrene = new Sprite(resources['barreneImg'].texture);
+    this.barrene.x = this.x + this.width / 2 - 24 - this.price.value.toString().length * 5;
+    this.barrene.y = this.y + this.height / 2 + 2;
+    this.barrene.width = 24;
+    this.barrene.height = 24;
+
+    this.container.addChild(this.barrene);
   }
 
   update() {
-    if (mouseX > this.x && mouseX < this.x + this.width && mouseY > this.y && mouseY < this.y + this.heigth) {
-      if (gameScreen.money >= this.price.value) {
-        if (mouseIsPressed) {
-          this.fill = color(180, 255, 180);
-        } else {
-          this.fill = color(200, 255, 200);
-        }
-        
-        csr = HAND;
-      } else {
-        this.fill = color(255, 200, 200);
-      }
-      
+    if (gameScreen.money >= this.price.value) {      
+        this.hoverFill = 0xB4FFB4;
+        this.downFill = 0x96FF96;
     } else {
-      this.fill = 255;
-    }
-  }
-
-  draw() {
-    stroke(0);
-    strokeWeight(3);
-    fill(this.fill);
-
-    rect(this.x, this.y, this.width, this.heigth);
-
-    textAlign(CENTER, CENTER);
-
-    fill(0);
-    strokeWeight(0);
-
-    textSize(16);
-    text(this.text, this.x + this.width / 2, this.y + this.heigth / 2 - 10);
-    text(this.price.value, this.x + this.width / 2 + 10, this.y + this.heigth / 2 + 10);
-    image(barreneImg, this.x + this.width / 2 - 15 - Math.floor(getBaseLog(10, this.price.value)) * 5, this.y + this.heigth / 2, 16, 16);
-  }
-
-  click(posX, posY) {
-    if (posX > this.x && posX < this.x + this.width && posY > this.y && posY < this.y + this.heigth) {
-      if (gameScreen.money >= this.price.value) {
-        this.fn();
-      }
-      return true;
+        this.hoverFill = 0xFFC8C8;
+        this.downFill = 0xFFC8C8;
     }
 
-    return false;
+    this.priceText.text = this.price.value;
+    this.barrene.x = this.x + this.width / 2 - 24 - this.price.value.toString().length * 5;
+    
+  }
+
+  click() {    
+    if (gameScreen.money >= this.price.value) {
+      this.fn();
+    }
+
+    if (gameScreen.money < this.price.value) {
+      this.hoverFill = 0xFFC8C8;
+      this.downFill = 0xFFC8C8;
+    }
   }
 
 }
