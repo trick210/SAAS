@@ -8,11 +8,8 @@ class AudiA4 extends Entity {
 
     this.img.anchor.set(0.5);
 
-    this.sound = resources['skrrrSound'].sound;
-    this.sound.volume = 0.1;
-    if (!this.sound.isPlaying) {
-      this.sound.play();
-    }
+    gameScreen.soundManager.play('skrrrSound', true);
+
   }
 
   update() {

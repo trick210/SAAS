@@ -10,7 +10,7 @@ class DeathScreen {
     this.bg.height = height;
     this.bg.tint = 0x2C3539;
     this.bg.interactive = true;
-    this.bg.on('click', this.click);
+    this.bg.on('pointertap', this.click);
 
     this.deathText = new PIXI.Text('Etzala Besigt!', {fontFamily: 'Arial', fontSize: 144, fill: 'red', align: 'center', stroke: 'black', strokeThickness: 5});
     this.clickText = new PIXI.Text("click to play again", {fontFamily: 'Arial', fontSize: this.size, fill: 'white', align: 'center', stroke: 'black', strokeThickness: 5});

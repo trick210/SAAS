@@ -10,7 +10,7 @@ class MenuScreen {
     this.bg.height = height;
     this.bg.tint = 0x2C3539;
     this.bg.interactive = true;
-    this.bg.on('click', this.click);
+    this.bg.on('pointertap', this.click);
 
     this.titleText = new PIXI.Text("Sturm auf Altschauerberg", {fontFamily: 'Arial', fontSize: 96, fill: 'white', align: 'center', stroke: 'black', strokeThickness: 5});
     this.subtitleText = new PIXI.Text("A Youtuber\'s Life", {fontFamily: 'Arial', fontSize: 72, fill: 'white', align: 'center', stroke: 'black', strokeThickness: 5});
@@ -46,6 +46,10 @@ class MenuScreen {
 
   click() {
     setActiveScreen(gameScreen);
+    if (gameScreen.paused) {
+      gameScreen.paused = false;
+      gameScreen.soundManager.resume();
+    }
   }
 
 }

@@ -1,12 +1,10 @@
-let haiderImg;
-let screamImg;
-let barreneImg;
 let menuScreen;
 let gameScreen;
 let deathScreen;
 let activeScreen = null;
 
-let skrrrSound;
+let volume = 0.1;
+let screamCount = 7;
 
 let width = 1920;
 let height = 1080;
@@ -49,6 +47,10 @@ loader
 
 for (let i = 1; i <= 7; i++) {
   loader.add(`fence${i}`, `assets/fence/fence${i}.png`);
+}
+
+for (let i = 1; i <= screamCount; i++) {
+  loader.add(`scream${i}`, `assets/sounds/screams/scream${i}.wav`);
 }
 
 loader.load(setup);

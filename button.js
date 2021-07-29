@@ -44,7 +44,7 @@ class Button {
     this.rect.on('pointerupoutside', this.onButtonUp.bind(this))
     this.rect.on('pointerover', this.onButtonOver.bind(this))
     this.rect.on('pointerout', this.onButtonOut.bind(this));
-    this.rect.on('click', this.click.bind(this));
+    this.rect.on('pointertap', this.click.bind(this));
     
   }
 

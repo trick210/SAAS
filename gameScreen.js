@@ -26,6 +26,7 @@ class GameScreen {
     this.fencePrice.value = 20;
 
     this.overlay = false;
+    this.paused = false;
 
     this.clockCounter = 0;
 
@@ -59,7 +60,9 @@ class GameScreen {
     this.bgContainer.addChild(this.houseFront);
 
     this.houseFront.interactive = true;
-    this.houseFront.on('click', this.clickHouse.bind(this));
+    this.houseFront.on('pointertap', this.clickHouse.bind(this));
+
+    this.soundManager = new SoundManager();
   }
 
   update() {
@@ -93,6 +96,7 @@ class GameScreen {
 
     if (this.health <= 0) {
       setActiveScreen(deathScreen);
+      this.soundManager.stop();
     }
     
   }
@@ -114,6 +118,8 @@ class GameScreen {
 
   keyPress(key) {
   	if (key == "Escape") {
+      this.soundManager.pause();
+      this.paused = true;
   		setActiveScreen(menuScreen);
   	}
   }

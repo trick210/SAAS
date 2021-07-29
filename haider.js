@@ -16,7 +16,7 @@ class Haider extends Entity {
     this.alpha = 1;
 
     this.img.interactive = true;
-    this.img.on('click', this.click.bind(this));
+    this.img.on('pointertap', this.click.bind(this));
 
     this.img.anchor.set(0.5, 1 - 120 / this.height);
     
