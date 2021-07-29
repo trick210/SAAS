@@ -61,7 +61,7 @@ class DeathScreen {
 
   click() {
     gameScreen = new GameScreen();
-  	setActiveScreen(gameScreen);   
+  	setActiveScreen(gameScreen);
   }
 
 }

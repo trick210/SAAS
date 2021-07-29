@@ -96,7 +96,7 @@ class GameScreen {
 
     if (this.health <= 0) {
       setActiveScreen(deathScreen);
-      this.soundManager.stop();
+      this.soundManager.play('deathSound', true);
     }
     
   }

@@ -49,6 +49,8 @@ class MenuScreen {
     if (gameScreen.paused) {
       gameScreen.paused = false;
       gameScreen.soundManager.resume();
+    } else {
+      gameScreen.soundManager.play('startSound');
     }
   }
 

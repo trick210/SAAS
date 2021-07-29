@@ -4,7 +4,7 @@ let deathScreen;
 let activeScreen = null;
 
 let volume = 0.1;
-let screamCount = 7;
+let screamCount = 104;
 
 let width = 1920;
 let height = 1080;
@@ -43,7 +43,9 @@ loader
   .add('screamImg', 'assets/schrei.png')
   .add('barreneImg', 'assets/Barrene.png')
   .add('audiImg', 'assets/AudiA4.png')
-  .add('skrrrSound' , 'assets/sounds/skrrr-skrrr.mp3');
+  .add('skrrrSound', 'assets/sounds/skrrr-skrrr.mp3')
+  .add('deathSound', 'assets/sounds/deathSound.wav')
+  .add('startSound', 'assets/sounds/startSound.wav');
 
 for (let i = 1; i <= 7; i++) {
   loader.add(`fence${i}`, `assets/fence/fence${i}.png`);
