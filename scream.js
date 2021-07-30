@@ -14,7 +14,7 @@ class Scream extends Entity {
     this.img.anchor.set(0.5);
 
     this.screamID = Math.ceil(Math.random() * screamCount);
-    gameScreen.soundManager.play(`scream${this.screamID}`);
+    soundManager.play(`scream${this.screamID}`);
 
   }
 

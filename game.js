@@ -3,6 +3,7 @@ let gameScreen;
 let deathScreen;
 let activeScreen = null;
 
+let soundManager;
 let volume = 0.1;
 let screamCount = 104;
 
@@ -35,6 +36,10 @@ window.addEventListener("resize", function(event){
   scale = scaleToWindow(app.renderer.view, '#2C3539');
 });
 
+let loadingScreen = new LoadingScreen();
+
+setActiveScreen(loadingScreen);
+
 loader
   .add('bg', 'assets/Sturm_auf_Schanze_hintergrund.png')
   .add('houseFrontImg', 'assets/saas_Haus_Vorne.png')
@@ -55,6 +60,7 @@ for (let i = 1; i <= screamCount; i++) {
   loader.add(`scream${i}`, `assets/sounds/screams/scream${i}.wav`);
 }
 
+loader.onProgress.add(loadingScreen.progress.bind(loadingScreen));
 loader.load(setup);
 
 
@@ -66,6 +72,8 @@ esc.press = () => {
 };
 
 function setup() {
+
+  soundManager = new SoundManager();
 
   gameScreen = new GameScreen();
   menuScreen = new MenuScreen();

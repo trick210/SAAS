@@ -218,6 +218,7 @@ class BuyButton extends Button {
     if (gameScreen.money < this.price.value) {
       this.hoverFill = 0xFFC8C8;
       this.downFill = 0xFFC8C8;
+      this.rect.tint = 0xFFC8C8;
     }
   }
 

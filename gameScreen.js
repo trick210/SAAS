@@ -2,8 +2,6 @@ class GameScreen {
 
   constructor() {
 
-    
-
     this.entities = [];
   	this.score = 0;
     this.money = 0;
@@ -28,7 +26,8 @@ class GameScreen {
     this.overlay = false;
     this.paused = false;
 
-    this.clockCounter = 0;
+    this.energyClock = 0;
+    this.spawnClock = 0;
 
     this.screamCD = false;
     
@@ -62,7 +61,6 @@ class GameScreen {
     this.houseFront.interactive = true;
     this.houseFront.on('pointertap', this.clickHouse.bind(this));
 
-    this.soundManager = new SoundManager();
   }
 
   update() {
@@ -71,18 +69,24 @@ class GameScreen {
       return;
     }
 
-		let r = Math.random() * 50;
+    this.spawnClock += deltaTime;
 
-		if (r < 1) {
-	  	this.spawn();
+    if (this.spawnClock > 100) {
+		  let r = Math.random() * 10;
+
+      if (r < 1) {
+        this.spawn();
+      }
+
+      this.spawnClock -= 100;
     }
 
     if (this.energy < this.maxEnergy) {
-      this.clockCounter += deltaTime;
+      this.energyClock += deltaTime;
     }
 
-    if (this.clockCounter >= 500) {
-      this.clockCounter -= 500;
+    if (this.energyClock >= 500) {
+      this.energyClock -= 500;
       this.energy = Math.min(this.maxEnergy, this.energy + this.energyReg / 2);
     }
 
@@ -96,7 +100,7 @@ class GameScreen {
 
     if (this.health <= 0) {
       setActiveScreen(deathScreen);
-      this.soundManager.play('deathSound', true);
+      soundManager.play('deathSound', true);
     }
     
   }
@@ -118,7 +122,7 @@ class GameScreen {
 
   keyPress(key) {
   	if (key == "Escape") {
-      this.soundManager.pause();
+      soundManager.pause();
       this.paused = true;
   		setActiveScreen(menuScreen);
   	}

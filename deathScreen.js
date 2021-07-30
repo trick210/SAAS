@@ -31,7 +31,7 @@ class DeathScreen {
   }
 
   update() {
-    this.x = (this.x + Math.PI / 32) % (2 * Math.PI);
+    this.x = (this.x + (Math.PI / 32) * (deltaTime / 16)) % (2 * Math.PI);
 
     this.size = 72 + 8 * Math.sin(this.x);
     this.clickText.style.fontSize = this.size;
@@ -62,6 +62,7 @@ class DeathScreen {
   click() {
     gameScreen = new GameScreen();
   	setActiveScreen(gameScreen);
+    soundManager.play('startSound');
   }
 
 }

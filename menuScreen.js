@@ -38,7 +38,7 @@ class MenuScreen {
   }
 
   update() {
-    this.x = (this.x + Math.PI / 32) % (2 * Math.PI);
+    this.x = (this.x + (Math.PI / 32) * (deltaTime / 16)) % (2 * Math.PI);
 
     this.size = 72 + 8 * Math.sin(this.x);
     this.clickText.style.fontSize = this.size;
@@ -48,9 +48,9 @@ class MenuScreen {
     setActiveScreen(gameScreen);
     if (gameScreen.paused) {
       gameScreen.paused = false;
-      gameScreen.soundManager.resume();
+      soundManager.resume();
     } else {
-      gameScreen.soundManager.play('startSound');
+      soundManager.play('startSound');
     }
   }
 
