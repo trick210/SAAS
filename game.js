@@ -23,11 +23,10 @@ let app = new PIXI.Application({
     height: height,                       
     antialias: true, 
     transparent: false, 
-    resolution: 1
+    resolution: 1,
+    backgroundColor: 0x2C3539
   }
 );
-
-app.renderer.backgroundColor = 0x2C3539;
 
 document.body.appendChild(app.view);
 let scale = scaleToWindow(app.renderer.view, '#2C3539');

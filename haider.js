@@ -1,9 +1,7 @@
 class Haider extends Entity {
 
-  
-
   constructor(posX, posY) {
-    super(posX, posY, 96, 192, new Sprite(resources['haiderImg'].texture));
+    super(posX, posY, 96, 192, resources['haiderImg'].texture);
 
     this.currentAI = new RunAI(this);
 
@@ -15,17 +13,15 @@ class Haider extends Entity {
     this.killed = false;
     this.alpha = 1;
 
-    this.img.interactive = true;
-    this.img.on('pointertap', this.click.bind(this));
+    this.interactive = true;
+    this.on('pointertap', this.click.bind(this));
 
-    this.img.anchor.set(0.5, 1 - 120 / this.height);
+    this.anchor.set(0.5, 1 - 120 / this.height);
     
   }
 
   update() {
     this.currentAI.update();
-    super.update();
-    
   }
 
 
@@ -33,7 +29,7 @@ class Haider extends Entity {
     if (!this.killed && !gameScreen.screamCD) {
       if (gameScreen.energy >= gameScreen.screamCost) {
         this.kill();
-        gameScreen.entities.push(new Scream(this.x, this.y));
+        gameScreen.entityContainer.addChild(new Scream(this.x, this.y));
         gameScreen.energy -= gameScreen.screamCost;
         gameScreen.screamCD = true;
       }
@@ -43,7 +39,7 @@ class Haider extends Entity {
   kill() {
     gameScreen.score++;
     this.killed = true;
-    this.img.interactive = false;
+    this.interactive = false;
     this.currentAI = new WalkBackAI(this);
 
     

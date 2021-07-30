@@ -2,7 +2,6 @@ class GameScreen {
 
   constructor() {
 
-    this.entities = [];
   	this.score = 0;
     this.money = 0;
     
@@ -48,6 +47,7 @@ class GameScreen {
     this.container = new PIXI.Container();
     this.bgContainer = new PIXI.Container();
     this.entityContainer = new PIXI.Container();
+    this.entityContainer.on('childAdded', this.sortEntities.bind(this));
 
     this.container.addChild(this.bgContainer);
     this.container.addChild(this.entityContainer);
@@ -90,8 +90,8 @@ class GameScreen {
       this.energy = Math.min(this.maxEnergy, this.energy + this.energyReg / 2);
     }
 
-    for (let i = 0; i < this.entities.length; i++) {
-      this.entities[i].update();
+    for (let i = 0; i < this.entityContainer.children.length; i++) {
+      this.entityContainer.children[i].update();
     }
 
     this.sortEntities();
@@ -108,13 +108,13 @@ class GameScreen {
 
   spawn() {
     let y = 250 + Math.random() * 690;
-    this.entities.push(new Haider(-64, y));
+    this.entityContainer.addChild(new Haider(-64, y));
   }
 
 
   clickHouse(event) {
     if (this.energy >= this.barreneCost) {
-      this.entities.push(new Barrene(event.data.global.x, event.data.global.y));
+      this.entityContainer.addChild(new Barrene(event.data.global.x, event.data.global.y));
       this.money++;
       this.energy -= this.barreneCost;
     }
@@ -140,7 +140,7 @@ class GameScreen {
   }
 
   spawnCar() {
-    this.entities.push(new AudiA4());
+    this.entityContainer.addChild(new AudiA4());
   }
 
   sortEntities() {

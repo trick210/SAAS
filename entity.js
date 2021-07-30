@@ -1,32 +1,21 @@
-class Entity {
+class Entity extends PIXI.Sprite {
 
-  constructor(posX, posY, entityWidth, entityHeight, sprite) {
+  constructor(posX, posY, entityWidth, entityHeight, texture) {
+    super(texture);
+
     this.x = posX;
     this.y = posY;
     this.width = entityWidth;
     this.height = entityHeight;
 
-
-    this.img = sprite;
-    this.img.x = this.x;
-    this.img.y = this.y;
-    this.img.width = this.width;
-    this.img.height = this.height;
-    this.img.layer = 0;
-    gameScreen.entityContainer.addChild(this.img);
-    gameScreen.sortEntities();
+    this.layer = 0;
   }
 
   update() {
     
-    this.img.x = this.x;
-    this.img.y = this.y;
-    
   }
 
   remove() {
-    gameScreen.entityContainer.removeChild(this.img);
-    let i = gameScreen.entities.indexOf(this);
-    gameScreen.entities.splice(i, 1);
+    gameScreen.entityContainer.removeChild(this);
   }
 }

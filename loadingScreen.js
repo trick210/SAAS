@@ -11,7 +11,7 @@ class LoadingScreen {
     this.barBack = new PIXI.Graphics();    
     this.barBack.lineStyle(6, 0x000000, 1);
     this.barBack.beginFill(0x000000, 0);
-    this.barBack.drawRect(width / 2 - 255, height / 2 - 5, 510, 80);
+    this.barBack.drawRect(width / 2 - 253, height / 2 - 3, 506, 76);
     this.barBack.endFill();
 
     this.barFront = new PIXI.Graphics();    
