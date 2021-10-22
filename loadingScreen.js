@@ -8,32 +8,32 @@ class LoadingScreen {
     this.loadingText.y = height / 2 - 200;
     this.loadingText.anchor.set(0.5, 0);
 
-    this.barBack = new PIXI.Graphics();    
-    this.barBack.lineStyle(6, 0x000000, 1);
-    this.barBack.beginFill(0x000000, 0);
-    this.barBack.drawRect(width / 2 - 253, height / 2 - 3, 506, 76);
-    this.barBack.endFill();
+    this.barFrame = new PIXI.Graphics();    
+    this.barFrame.lineStyle(6, 0x000000, 1);
+    this.barFrame.beginFill(0x000000, 0);
+    this.barFrame.drawRect(width / 2 - 250, height / 2, 500, 70);
+    this.barFrame.endFill();
 
-    this.barFront = new PIXI.Graphics();    
-    this.barFront.beginFill(0xFFFFFF);
-    this.barFront.drawRect(0, 0, 500, 70);
-    this.barFront.endFill();
-    this.barFront.x = width / 2 - 250;
-    this.barFront.y = height/ 2;
-    this.barFront.width = 0;
+    this.progBar = new PIXI.Graphics();    
+    this.progBar.beginFill(0xFFFFFF);
+    this.progBar.drawRect(0, 0, 500, 70);
+    this.progBar.endFill();
+    this.progBar.x = width / 2 - 250;
+    this.progBar.y = height/ 2;
+    this.progBar.width = 0;
 
     this.container = new PIXI.Container();
 
     this.container.addChild(this.loadingText);
-    this.container.addChild(this.barBack);
-    this.container.addChild(this.barFront);
+    this.container.addChild(this.progBar);
+    this.container.addChild(this.barFrame);
 
   }
 
   progress(loader) {
     
     let prog = loader.progress / 100;
-    this.barFront.width = 500 * prog;
+    this.progBar.width = 500 * prog;
   }
 
 

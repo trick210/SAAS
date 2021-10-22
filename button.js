@@ -118,7 +118,7 @@ class CDButton extends Button {
     this.btnProgress.drawRoundedRect(0, 0, this.width, this.height, 10);
     this.btnProgress.endFill();
 
-    this.btnProgress.tint = 0x9696FF;
+    this.btnProgress.tint = this.ready ? 0xB4FFB4 : 0x9696FF;
 
     this.btnProgress.x = this.x;
     this.btnProgress.y = this.y;
@@ -162,6 +162,7 @@ class CDButton extends Button {
     if (this.ready) {
       this.fn();
       this.ready = false;
+      this.btnProgress.width = 0;
       this.btnProgress.tint = 0x9696FF;
     }
   }
